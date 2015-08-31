@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting type="lsep" label="30010" />
-    <setting id="custom_log_enabled" type="bool" label="30012" default="false" />
-	<setting id="log_file_name" type="folder" label="30013" default="" />
-	<setting id="blacklist" type="text" label="30014" default="sample.,-trailer." />
-    <setting id="blacklisted_file_extensions" type="text" label="30129" default=".bin|.dat" />
+    <setting id="blacklisted_extensions" label="30001" type="text" default=".bin|.dat|.zip" />
+    <setting id="blacklisted_directories" label="30002" type="text" default="sample|subs|extras" />
+    <setting id="blacklisted_words" label="30003" type="text" default="" />
 </settings>
 

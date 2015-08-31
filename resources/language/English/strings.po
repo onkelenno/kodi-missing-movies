@@ -1,0 +1,18 @@
+# XBMC Media Center language file
+# Addon Name: Missing Movies
+# Addon id: plugin.video.mms
+msgid ""
+msgstr ""
+
+msgctxt "#30001"
+msgid "Blacklisted file extensions"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Blacklisted directory names"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Blacklisted words (separated with |)"
+msgstr ""
+
