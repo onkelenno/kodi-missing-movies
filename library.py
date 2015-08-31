@@ -29,6 +29,15 @@ def jsonrpc(query):
     return json.loads(xbmc.executeJSONRPC(json.dumps(query, encoding='utf-8')))
 
 
+def _unstack(paths):
+    for path in paths:
+        if path.startswith("stack://"):
+            for part in path.split("stack://", 1)[1].split(" , "):
+                yield part
+        else:
+            yield path
+
+
 def get_movies():
     query = {
         "jsonrpc": "2.0",
@@ -37,7 +46,7 @@ def get_movies():
         "id": 1
     }
     items = jsonrpc(query)['result'].get('movies', [])
-    return [item['file'].encode('utf-8') for item in items]
+    return list(_unstack((item['file'].encode('utf-8') for item in items)))
 
 
 def get_tvshows():
@@ -59,7 +68,7 @@ def get_episodes():
         "id": 1
     }
     items = jsonrpc(query)['result'].get('episodes', [])
-    return [item['file'].encode('utf-8') for item in items]
+    return list(_unstack((item['file'].encode('utf-8') for item in items)))
 
 
 def get_sources():
