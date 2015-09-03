@@ -40,6 +40,8 @@ BLACKLISTED_WORDS = filter(bool, addon.getSetting('blacklisted_words').split('|'
 BLACKLISTED_DIRECTORIES = filter(bool, addon.getSetting('blacklisted_directories').split('|'))
 SCAN_RECURSIVELY = addon.getSetting('scan_recursively') == 'true'
 
+tr = addon.getLocalizedString
+
 
 def filter_video(path):
     if any((word in path for word in BLACKLISTED_WORDS)):
@@ -111,19 +113,19 @@ def list_files(files):
 
 @plugin.route("/")
 def root():
-    add_dir("Missing movies", plugin.url_for(missing_movies))
-    add_dir("Missing TV shows", plugin.url_for(missing_tvshows))
-    add_dir("Missing episodes", plugin.url_for(missing_episodes))
-    add_dir("Sources", plugin.url_for(sources_root))
-    add_dir("Export", plugin.url_for(export))
+    add_dir(tr(30005), plugin.url_for(missing_movies))
+    add_dir(tr(30006), plugin.url_for(missing_tvshows))
+    add_dir(tr(30007), plugin.url_for(missing_episodes))
+    add_dir(tr(30008), plugin.url_for(sources_root))
+    add_dir(tr(30009), plugin.url_for(export))
     endOfDirectory(plugin.handle)
 
 
 @plugin.route("/sources")
 def sources_root():
-    add_dir("Movie source", plugin.url_for(sources_by_content, "movies"))
-    add_dir("TV source", plugin.url_for(sources_by_content, "tv"))
-    add_dir("Video sources", plugin.url_for(sources_by_content, "all"))
+    add_dir(tr(30010), plugin.url_for(sources_by_content, "movies"))
+    add_dir(tr(30011), plugin.url_for(sources_by_content, "tv"))
+    add_dir(tr(30012), plugin.url_for(sources_by_content, "all"))
     endOfDirectory(plugin.handle)
 
 
@@ -188,7 +190,7 @@ def export():
     import xbmcvfs
     from datetime import datetime
 
-    dest = xbmcgui.Dialog().browse(0, "Select destination", 'files')
+    dest = xbmcgui.Dialog().browse(0, tr(30013), 'files')
     if not dest:
         return
     dest = fsutils.join(dest, 'missing.txt')
@@ -207,7 +209,7 @@ def export():
             f.write(path)
             f.write("\n")
         f.write("\n")
-        xbmcgui.Dialog().ok("Success", "Successfully exported to %s" % dest)
+        xbmcgui.Dialog().ok(tr(30014), tr(30015) % dest)
     finally:
         if f:
             f.close()
