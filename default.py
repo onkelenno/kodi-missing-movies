@@ -73,9 +73,7 @@ def add_dir(label, path):
     addDirectoryItem(plugin.handle, path, ListItem(label), True)
 
 
-def show_missing_videos(sources, known_paths):
-    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL)
-
+def find_missing_videos(sources, known_paths):
     def filter_dir(path, name):
         if name and name.lower() in BLACKLISTED_DIRECTORIES:
             logging.debug("skipping '%s'. blacklisted directory" % fsutils.join(path, name))
@@ -99,10 +97,14 @@ def show_missing_videos(sources, known_paths):
 
             if abs_path not in known_paths:
                 missing.append(abs_path)
+    return missing
 
-    for path in missing:
+
+def list_files(files):
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL)
+    for path in files:
         li = ListItem(os.path.basename(path))
-        addDirectoryItem(plugin.handle, path, li, False)
+        addDirectoryItem(plugin.handle, path, li, False, len(files))
     endOfDirectory(plugin.handle)
 
 
@@ -112,6 +114,7 @@ def root():
     add_dir("Missing TV shows", plugin.url_for(missing_tvshows))
     add_dir("Missing episodes", plugin.url_for(missing_episodes))
     add_dir("By source", plugin.url_for(sources_root))
+    add_dir("Export", plugin.url_for(export))
     endOfDirectory(plugin.handle)
 
 
@@ -142,19 +145,20 @@ def sources_by_content(content_type):
 @plugin.route("/missing_videos/source/<path>")
 def missing_by_source(path):
     path = unquote_plus(path).rstrip('\\/')
-    show_missing_videos([path], library.get_movies() + library.get_episodes())
+    list_files(find_missing_videos([path], library.get_movies()
+        + library.get_episodes()))
 
 
 @plugin.route("/missing_movies")
 def missing_movies():
     sources = [_.path for _ in library.get_movie_sources()]
-    show_missing_videos(sources, library.get_movies())
+    list_files(find_missing_videos(sources, library.get_movies()))
 
 
 @plugin.route("/missing_episodes")
 def missing_episodes():
     sources = [_.path for _ in library.get_tv_sources()]
-    show_missing_videos(sources, library.get_episodes())
+    list_files(find_missing_videos(sources, library.get_episodes()))
 
 
 @plugin.route("/missing_tvshow")
@@ -175,6 +179,37 @@ def missing_tvshows():
     for path in missing:
         add_dir(os.path.basename(path), path)
     endOfDirectory(plugin.handle)
+
+
+@plugin.route("/export")
+def export():
+    import xbmcgui
+    import xbmcvfs
+    from datetime import datetime
+
+    dest = xbmcgui.Dialog().browse(0, "Select destination", 'files')
+    if not dest:
+        return
+    dest = fsutils.join(dest, 'missing.txt')
+
+    missing = find_missing_videos(
+        [_.path for _ in library.get_sources()],
+        library.get_movies() + library.get_episodes())
+
+    f = None
+    try:
+        f = xbmcvfs.File(dest, 'w')
+        f.write("*********************************************************\n")
+        f.write("Missing Movies scan results %s\n" % datetime.now())
+        f.write("*********************************************************\n")
+        for path in missing:
+            f.write(path)
+            f.write("\n")
+        f.write("\n")
+        xbmcgui.Dialog().ok("Success", "Successfully exported to %s" % dest)
+    finally:
+        if f:
+            f.close()
 
 
 if __name__ == '__main__':
