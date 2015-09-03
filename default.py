@@ -102,6 +102,7 @@ def find_missing_videos(sources, known_paths):
 
 def list_files(files):
     xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL)
+    xbmcplugin.setContent(plugin.handle, "files")
     for path in files:
         li = ListItem(os.path.basename(path))
         addDirectoryItem(plugin.handle, path, li, False, len(files))
