@@ -114,7 +114,7 @@ def root():
     add_dir("Missing movies", plugin.url_for(missing_movies))
     add_dir("Missing TV shows", plugin.url_for(missing_tvshows))
     add_dir("Missing episodes", plugin.url_for(missing_episodes))
-    add_dir("By source", plugin.url_for(sources_root))
+    add_dir("Sources", plugin.url_for(sources_root))
     add_dir("Export", plugin.url_for(export))
     endOfDirectory(plugin.handle)
 
