@@ -38,6 +38,7 @@ FILE_EXTENSIONS = filter(bool, set(xbmc.getSupportedMedia('video').split('|'))
 
 BLACKLISTED_WORDS = filter(bool, addon.getSetting('blacklisted_words').split('|'))
 BLACKLISTED_DIRECTORIES = filter(bool, addon.getSetting('blacklisted_directories').split('|'))
+SCAN_RECURSIVELY = addon.getSetting('scan_recursively') == 'true'
 
 
 def filter_video(path):
@@ -83,7 +84,12 @@ def show_missing_videos(sources, known_paths):
 
     missing = []
     for source in sources:
-        for entry in fsutils.walk(source, filter_dir):
+        if SCAN_RECURSIVELY:
+            entries = fsutils.walk(source, filter_dir)
+        else:
+            logging.debug("scanning '%s' non-recursively" % source)
+            entries = fsutils.listdir(source)
+        for entry in entries:
             if entry.is_dir:
                 continue
 

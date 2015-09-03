@@ -16,3 +16,6 @@ msgctxt "#30003"
 msgid "Blacklisted words (separated with |)"
 msgstr ""
 
+msgctxt "#30004"
+msgid "Scan sources recursively"
+msgstr ""
