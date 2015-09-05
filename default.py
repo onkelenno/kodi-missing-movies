@@ -98,7 +98,10 @@ def find_missing_videos(sources, known_paths):
                 continue
 
             if abs_path not in known_paths:
+                logging.debug("'%s' identified as missing" % abs_path)
                 missing.append(abs_path)
+            else:
+                logging.debug("'%s' identified as known" % abs_path)
     return missing
 
 
