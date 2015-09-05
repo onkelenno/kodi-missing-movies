@@ -48,7 +48,7 @@ def filter_video(path):
         logging.debug("skipping '%s'. contains blacklisted word" % path)
         return False
 
-    filename = os.path.basename(path.rstrip("\\/"))
+    filename = os.path.basename(path.rstrip('/'))
     basename, ext = os.path.splitext(filename)
 
     if ext == "" or ext.lower() not in FILE_EXTENSIONS:
