@@ -17,14 +17,8 @@
 
 import os
 from collections import namedtuple
-
-try:
-    import xbmc
-    import xbmcvfs
-except ImportError:
-    xbmc = None
-    xbmcvfs = None
-    pass
+import xbmc
+import xbmcvfs
 
 
 DirEntry = namedtuple('DirEntry', ['name', 'is_dir'])
