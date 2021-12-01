@@ -17,15 +17,12 @@
 
 import os
 from collections import namedtuple
-
-try:
-    import xbmc
-    import xbmcvfs
-except ImportError:
-    pass
+import xbmc
+import xbmcvfs
 
 
 DirEntry = namedtuple('DirEntry', ['name', 'is_dir'])
+monitor = xbmc.Monitor()
 
 
 def _listdir(path):
@@ -36,12 +33,12 @@ def _listdir(path):
 
     # Emulate xbmcvfs.listdir
     assert isinstance(path, str)
-    assert path.endswith(b'/')
+    assert path.endswith('/')
     assert os.path.isdir(path)
 
     dirs = []
     files = []
-    path = path.rstrip(b'/')
+    path = path.rstrip('/')
     try:
         for name in os.listdir(path):
             if os.path.isdir(os.path.join(path, name)):
@@ -54,12 +51,12 @@ def _listdir(path):
 
 
 def walk(path, filter_dir=lambda *args: True):
-    assert not isinstance(path, unicode)
-    return _walk(path, b'', filter_dir)
+    assert not isinstance(path, str)
+    return _walk(path, '', filter_dir)
 
 
 def listdir(path):
-    assert not isinstance(path, unicode)
+    assert not isinstance(path, str)
     if not path.endswith('/'):
         path += '/'
 
@@ -72,8 +69,8 @@ def listdir(path):
 
 def _walk(path_head, path_tail, filter_dir):
     try:
-        if xbmc.abortRequested:
-            raise OSError("interrupted")
+        if monitor.abortRequested():
+            return
     except NameError:
         pass
 
@@ -96,11 +93,11 @@ def join(base_path, *paths):
     Join VFS paths. Uses / as separator if base_path is an url. otherwise os.sep
     """
     assert isinstance(base_path, str)
-    assert base_path != b""
+    assert base_path != ""
     result = base_path
 
     for path in paths:
-        if result != b"" and not result.endswith('/') and not path.startswith('/'):
+        if result != "" and not result.endswith('/') and not path.startswith('/'):
             result += '/'
         result += path
 

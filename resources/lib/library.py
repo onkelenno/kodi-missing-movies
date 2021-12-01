@@ -19,14 +19,14 @@ import json
 import xbmc
 import logging
 from collections import namedtuple
-from urllib import unquote
+from urllib.parse import unquote
 
 
 Source = namedtuple('Source', ['name', 'path'])
 
 
 def jsonrpc(query):
-    return json.loads(xbmc.executeJSONRPC(json.dumps(query, encoding='utf-8')))
+    return json.loads(xbmc.executeJSONRPC(json.dumps(query)))
 
 
 def _unstack(paths):
@@ -57,7 +57,7 @@ def get_movies():
         "id": 1
     }
     items = jsonrpc(query)['result'].get('movies', [])
-    return list(map(_normalize_path, _unstack((item['file'].encode('utf-8') for item in items))))
+    return list(map(_normalize_path, _unstack((item['file'] for item in items))))
 
 
 def get_tvshows():
@@ -68,7 +68,7 @@ def get_tvshows():
         "id": 1
     }
     items = jsonrpc(query)['result'].get('tvshows', [])
-    return [_normalize_path(item['file'].encode('utf-8')) for item in items]
+    return [_normalize_path(item['file']) for item in items]
 
 
 def get_episodes():
@@ -79,7 +79,7 @@ def get_episodes():
         "id": 1
     }
     items = jsonrpc(query)['result'].get('episodes', [])
-    return list(map(_normalize_path, _unstack((item['file'].encode('utf-8') for item in items))))
+    return list(map(_normalize_path, _unstack((item['file'] for item in items))))
 
 
 def get_sources():
@@ -92,9 +92,9 @@ def get_sources():
     response = jsonrpc(query)
     sources = []
     for item in response['result'].get('sources', []):
-        paths = _unstack_multipath(item['file'].encode('utf-8'))
+        paths = _unstack_multipath(item['file'])
         for path in paths:
-            sources.append(Source(item['label'].encode('utf-8'), _normalize_path(path)))
+            sources.append(Source(item['label'], _normalize_path(path)))
     return sources
 
 
