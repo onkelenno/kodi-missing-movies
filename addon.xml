@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mms.oe" name="Missing Movies OE" version="4.1.0" provider-name="takoi, onkel_enno">
+<addon id="plugin.video.mms.oe" name="Missing Movies OE" version="4.1.0" provider-name="takoi, tamland, juokelis, onkel_enno">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.routing" version="0.2.3+matrix.1"/>
@@ -19,7 +19,7 @@ v4.0.5 (2016-01-17) by tamland
         </news>
         <license>GPL-3.0-or-later</license>
         <platform>all</platform>
-        <source>https://github.com/tamland/kodi-missing-movies</source>
+        <source>https://github.com/onkelenno/plugin.video.mms.oe</source>
         <forum>https://forum.kodi.tv/showthread.php?tid=118263</forum>
         <assets>
             <icon>resources/media/icon.png</icon>
