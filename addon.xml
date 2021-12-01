@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mms" name="Missing Movies" version="4.1.0" provider-name="takoi, juokelis">
+<addon id="plugin.video.mms.oe" name="Missing Movies OE" version="4.1.0" provider-name="takoi, onkel_enno">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.routing" version="0.2.3+matrix.1"/>

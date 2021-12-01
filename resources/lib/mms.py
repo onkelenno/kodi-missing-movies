@@ -113,7 +113,9 @@ def list_files(files):
     xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.setContent(plugin.handle, "files")
     for path in files:
-        li = ListItem(os.path.basename(path))
+        # onkel_enno        
+        # li = ListItem(os.path.basename(path))  
+        li = ListItem(path)
 
         if not re.match(r"[A-z0-9]+://.*", path) and os.sep == '\\':
             # Un-normalize for windows, otherwise manual search doesn't work
@@ -166,7 +168,8 @@ def missing_by_source(path):
 @plugin.route("/missing_movies")
 def missing_movies():
     sources = [_.path for _ in library.get_movie_sources()]
-    list_files(find_missing_videos(sources, library.get_movies()))
+    # onkel_enno:
+    list_files(find_missing_videos(sources, library.get_movies() + library.get_episodes()))
 
 
 @plugin.route("/missing_episodes")
